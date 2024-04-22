@@ -7,6 +7,7 @@ module.exports = function (defaults) {
     babel: {
       plugins: [...require('ember-cli-code-coverage').buildBabelPlugin()],
     },
+    hinting: false,
     // Add options here
   });
 
