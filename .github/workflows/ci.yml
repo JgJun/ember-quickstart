@@ -44,4 +44,4 @@ jobs:
       - name: Install Dependencies
         run: npm ci
       - name: Run Tests
-        run: COV=true ember t
+        run: ember test -- --coverageReporters='text-summary'
