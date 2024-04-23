@@ -29,19 +29,26 @@ jobs:
         run: npm ci
 
       - name: Run Tests
-        run: |
-          SUMMARY="npm test --coverage --coverageReporters=json-summary | tail -14 | head -1"
-          TOKENS=($SUMMARY)
-          echo "COVERAGE=$(echo ${TOKENS[2]})" >> $GITHUB_ENV
+        run: npm test --coverage --coverageReporters=json-summary
 
-      - name: Create Coverage Badge
-        uses: schneegans/dynamic-badges-action@v1.1.0
+      - name: Jest Coverage Comment
+        id: coverageComment
+        uses: MishaKav/jest-coverage-comment@main
+
+      - name: Check the output coverage
+        run: |
+          echo "Coverage Percentage - ${{ steps.coverageComment.outputs.coverage }}"
+          echo "Coverage Color - ${{ steps.coverageComment.outputs.color }}"
+          echo "Summary HTML - ${{ steps.coverageComment.outputs.summaryHtml }}"
+
+      - name: Create the badge
+        if: github.ref == 'refs/heads/main'
+        uses: schneegans/dynamic-badges-action@v1.6.0
         with:
           auth: ${{ secrets.GIST_SECRET }}
           gistID: bfbff6053e4307754e8c63a97c92effb
-          filename: ember-quickstart_coverage.json
-          label: coverage
-          message: ${{ env.COVERAGE }}
-          namedLogo: jest
-          color: blue
-          logoColor: lightblue
+          filename: jest-coverage-comment__main.json
+          label: Coverage
+          message: ${{ steps.coverageComment.outputs.coverage }}%
+          color: ${{ steps.coverageComment.outputs.color }}
+          namedLogo: javascript
