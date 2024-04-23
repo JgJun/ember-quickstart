@@ -30,6 +30,7 @@ jobs:
       - name: Run Tests
         run: |
           SUMMARY="$(npm test | tail -14 | head -1)"
+          echo "SUMMARY: $(SUMMARY)"
           TOKENS=($SUMMARY)
           echo "TOKENS[2]: $(TOKENS[2])"
           # process.env.COVERAGE = '31.93%';
