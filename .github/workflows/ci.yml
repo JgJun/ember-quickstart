@@ -28,6 +28,6 @@ jobs:
       - name: Install Dependencies
         run: npm ci
       - name: Run Tests
-        run: npm test --coverage --coverageReporters json-summary
+        run: npm test --coverage --coverageReporters=json-summary
       - name: Jest Coverage Comment
         uses: MishaKav/jest-coverage-comment@main
