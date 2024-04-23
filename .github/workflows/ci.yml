@@ -28,4 +28,4 @@ jobs:
       - name: Install Dependencies
         run: npm ci
       - name: Run Tests
-        run: npm text -- --coverageReporters='text-summary' | tail -14 | head -1
+        run: npm test | tail -14 | head -1
