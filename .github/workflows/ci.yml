@@ -27,7 +27,27 @@ jobs:
           cache: npm
       - name: Install Dependencies
         run: npm ci
+
       - name: Run Tests
         run: npm test --coverage --coverageReporters=json-summary
+
       - name: Jest Coverage Comment
         uses: MishaKav/jest-coverage-comment@main
+
+      - name: Check the output coverage
+        run: |
+          echo "Coverage Percentage - ${{ steps.coverageComment.outputs.coverage }}"
+          echo "Coverage Color - ${{ steps.coverageComment.outputs.color }}"
+          echo "Summary HTML - ${{ steps.coverageComment.outputs.summaryHtml }}"
+
+      - name: Create the badge
+        if: github.ref == 'refs/heads/main'
+        uses: schneegans/dynamic-badges-action@v1.6.0
+        with:
+          auth: ${{ secrets.JEST_COVERAGE_COMMENT }}
+          gistID: bfbff6053e4307754e8c63a97c92effb
+          filename: jest-coverage-comment__main.json
+          label: Coverage
+          message: ${{ steps.coverageComment.outputs.coverage }}%
+          color: ${{ steps.coverageComment.outputs.color }}
+          namedLogo: javascript
