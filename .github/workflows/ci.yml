@@ -32,6 +32,7 @@ jobs:
         run: npm test --coverage --coverageReporters=json-summary
 
       - name: Jest Coverage Comment
+        id: coverageComment
         uses: MishaKav/jest-coverage-comment@main
 
       - name: Check the output coverage
@@ -44,7 +45,7 @@ jobs:
         if: github.ref == 'refs/heads/main'
         uses: schneegans/dynamic-badges-action@v1.6.0
         with:
-          auth: ${{ secrets.JEST_COVERAGE_COMMENT }}
+          auth: ${{ secrets.GIST_SECRET }}
           gistID: bfbff6053e4307754e8c63a97c92effb
           filename: jest-coverage-comment__main.json
           label: Coverage
