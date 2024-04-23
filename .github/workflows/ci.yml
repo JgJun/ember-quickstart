@@ -28,4 +28,32 @@ jobs:
       - name: Install Dependencies
         run: npm ci
       - name: Run Tests
-        run: npm test | tail -14 | head -1
+        run: |
+          SUMMARY="$(npm test | tail -14 | head -1)"
+          TOKENS=($SUMMARY)
+          echo "TOKENS[2]: $(TOKENS[2])"
+          # process.env.COVERAGE = '31.93%';
+          echo "COVERAGE=$(echo ${TOKENS[2]})" >> $GITHUB_ENV
+
+          # var REF = 'refs/pull/27/merge.json';
+          REF=${{ github.ref }}
+          # console.log('github.ref: ' + REF);
+          echo "github.ref: $REF"
+          # var PATHS = REF.split('/');
+          IFS='/' read -ra PATHS <<< "$REF"
+          # var BRANCH_NAME = PATHS[1] + '_' + PATHS[2];
+          BRANCH_NAME="${PATHS[1]}_${PATHS[2]}"
+          # console.log(BRANCH_NAME); // 'pull_27'
+          echo $BRANCH_NAME
+          # process.env.BRANCH = 'pull_27';
+          echo "BRANCH=$(echo ${BRANCH_NAME})" >> $GITHUB_ENV
+      - name: Create the Badge
+        uses: schneegans/dynamic-badges-action@v1.0.0
+        with:
+          auth: ${{ secrets.GIST_SECRET }}
+          gistID: bfbff6053e4307754e8c63a97c92effb
+          filename: your-repo-name__${{ env.BRANCH }}.json
+          label: Test Coverage
+          message: ${{ env.COVERAGE }}
+          color: green
+          namedLogo: jest
