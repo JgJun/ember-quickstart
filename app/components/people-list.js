@@ -6,4 +6,8 @@ export default class PeopleListComponent extends Component {
   showPerson(person) {
     alert(`The person's name is ${person}!`);
   }
+
+  get totalPeople() {
+    return this.args.people.length;
+  }
 }
