@@ -52,7 +52,7 @@ jobs:
         with:
           auth: ${{ secrets.GIST_SECRET }}
           gistID: bfbff6053e4307754e8c63a97c92effb
-          filename: your-repo-name__${{ env.BRANCH }}.json
+          filename: ember-quickstart__${{ env.BRANCH }}.json
           label: Test Coverage
           message: ${{ env.COVERAGE }}
           color: green
