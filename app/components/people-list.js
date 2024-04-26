@@ -9,4 +9,5 @@ export default class PeopleListComponent extends Component {
   get count() {
     return this.args.people?.length;
   }
+  pr = true;
 }
