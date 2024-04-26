@@ -1,3 +1,4 @@
+![Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/JgJun/748b5f93aa4c57d788c5e82a378b9b3b/raw/jest-coverage-comment__main.json)
 # ember-quickstart
 
 This README outlines the details of collaborating on this Ember application.
