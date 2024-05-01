@@ -26,7 +26,7 @@ jobs:
 
       - name: Run Tests
         run: |
-          SUMMARY="$(npm test -- --coverageReporters='text-summary' | tail -14 | head -2)"
+          SUMMARY="$(npm test -- --coverageReporters='text-summary' | tail -14 | head -1)"
           TOKENS=($SUMMARY)
           echo "SUMMARY: $SUMMARY"
           echo "Token: $TOKENS[4]"
