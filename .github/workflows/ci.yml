@@ -32,4 +32,4 @@ jobs:
         run: echo "value=$(jq -r '.total.lines.pct|tostring + "%"' coverage/coverage-summary.json)" >> $GITHUB_OUTPUT
 
       - name: Check the output coverage
-        run: echo "JQ Coverage - coverage.outputs.value"
+        run: echo "JQ Coverage - ${{ coverage.outputs.value }}"
