@@ -29,7 +29,13 @@ jobs:
           SUMMARY="$(npm test -- --coverageReporters='text-summary' | tail -14 | head -1)"
           TOKENS=($SUMMARY)
           echo "SUMMARY: $SUMMARY"
+          echo "Token: ${TOKENS[0]}"
+          echo "Token: ${TOKENS[1]}"
+          echo "Token: ${TOKENS[2]}"
+          echo "Token: ${TOKENS[3]}"
+          echo "Token: ${TOKENS[4]}"
           echo "Token: ${TOKENS[5]}"
+          echo "Token: ${TOKENS[6]}"
           # process.env.COVERAGE = '31.93%';
           echo "COVERAGE=$(echo ${TOKENS[5]})" >> $GITHUB_ENV
 
