@@ -8,15 +8,45 @@ on:
       - CreatePrComment
 
 jobs:
-  comment:
+  test:
+    name: "Test"
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+
     steps:
-      - uses: actions/github-script@v6
+      - uses: actions/checkout@v3
+      - name: Install Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: npm
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run Tests
+        run: npm test -- --coverageReporters='text-summary'
+      
+      - name: Get line coverage output
+        id: lineCoverage
+        run: echo "value=$(jq -r '.total.lines.pct|tostring + "%"' coverage/coverage-summary.json)" >> $GITHUB_OUTPUT
+      
+      - name: Get statement coverage output
+        id: stmtCoverage
+        run: echo "value=$(jq -r '.total.statements.pct|tostring + "%"' coverage/coverage-summary.json)" >> $GITHUB_OUTPUT
+
+      - name: Check the Line output coverage
+        run: echo "JQ Line Coverage - ${{ steps.lineCoverage.outputs.value }}"
+      
+      - name: Check the Statement output coverage
+        run: echo "JQ Statement Coverage - ${{ steps.stmtCoverage.outputs.value }}"
+
+      - name: Add comment
+        uses: actions/github-script@v6
         with:
           script: |
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: '👋 Thanks for reporting!'
+              body: 'Lines: ${{ steps.lineCoverage.outputs.value }}  Statements: ${{ steps.stmtCoverage.outputs.value }}'
             })
