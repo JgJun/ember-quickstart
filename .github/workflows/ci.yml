@@ -1,53 +1,16 @@
 name: CI
 
-on:
-  pull_request:
-    types: [opened, reopened, edited]
-
-concurrency:
-  group: ci-${{ github.head_ref || github.ref }}
-  cancel-in-progress: true
+on: workflow_dispatch
 
 jobs:
-  test:
-    name: "Test"
+  open-issue:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
-
+    permissions:
+      contents: read
+      issues: write
     steps:
-      - uses: actions/checkout@v3
-      - name: Install Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-          cache: npm
-      - name: Install Dependencies
-        run: npm ci
-
-      - name: Run Tests
-        run: npm test -- --coverageReporters='text-summary'
-      
-      - name: Get line coverage output
-        id: lineCoverage
-        run: echo "value=$(jq -r '.total.lines.pct|tostring + "%"' coverage/coverage-summary.json)" >> $GITHUB_OUTPUT
-      
-      - name: Get statement coverage output
-        id: stmtCoverage
-        run: echo "value=$(jq -r '.total.statements.pct|tostring + "%"' coverage/coverage-summary.json)" >> $GITHUB_OUTPUT
-
-      - name: Check the Line output coverage
-        run: echo "JQ Line Coverage - ${{ steps.lineCoverage.outputs.value }}"
-      
-      - name: Check the Statement output coverage
-        run: echo "JQ Statement Coverage - ${{ steps.stmtCoverage.outputs.value }}"
-
-      - name: Add comment
-        uses: actions/github-script@v6
-        with: 
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: 'Lines: ${{ steps.lineCoverage.outputs.value }}  Statements: ${{ steps.stmtCoverage.outputs.value }}'
-            })
+      - run: |
+          gh issue --repo ${{ github.repository }} \
+            create --title "Issue title" --body "Issue body"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
