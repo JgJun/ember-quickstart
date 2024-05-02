@@ -1,4 +1,4 @@
 module.exports = {
-  reporters: ['text-summary'],
+  reporters: ['json-summary'],
   coverageEnvVar: 'COV',
 };
