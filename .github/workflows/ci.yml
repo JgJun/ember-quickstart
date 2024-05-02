@@ -1,8 +1,8 @@
 name: CI
 
 on:
-  push:
   pull_request:
+    types: [opened, reopened, edited]
 
 concurrency:
   group: ci-${{ github.head_ref || github.ref }}
