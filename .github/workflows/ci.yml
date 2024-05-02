@@ -1,18 +1,22 @@
 name: CI
 
 on:
+  # Trigger the workflow on push or pull request
   pull_request:
+    branches:
+      - master
+      - CreatePrComment
 
-  
 jobs:
-  open-issue:
+  comment:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      issues: write
     steps:
-      - run: |
-          gh issue --repo ${{ github.repository }} \
-            create --title "Issue title" --body "Issue body"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '👋 Thanks for reporting!'
+            })
