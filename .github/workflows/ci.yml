@@ -30,7 +30,7 @@ jobs:
       - name: Get coverage output
         id: coverage
         run: |
-          echo "value=$(jq -r --arg prefix "Lines: " '$prefix + (.total | (.lines.pct|tostring) + \"% \nStatements: \" + (.statements.pct|tostring) + \"% \nFunctions: \" + (.functions.pct|tostring) + \"% \nBranches: \" + (.branches.pct|tostring) + \"%\")' coverage/coverage-summary.json)" >> $GITHUB_OUTPUT
+          echo "value=$(jq -r --arg prefix \"Lines: \" '$prefix + (.total | (.lines.pct|tostring) + \"% \nStatements: \" + (.statements.pct|tostring) + \"% \nFunctions: \" + (.functions.pct|tostring) + \"% \nBranches: \" + (.branches.pct|tostring) + \"%\")' coverage/coverage-summary.json)" >> $GITHUB_OUTPUT
 
       - name: Check the output coverage
         run: echo "JQ Coverage - ${{ steps.coverage.outputs.value }}"
