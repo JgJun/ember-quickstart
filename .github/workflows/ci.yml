@@ -27,10 +27,16 @@ jobs:
       - name: Run Tests
         run: npm test -- --coverageReporters='text-summary'
       
-      - name: Get coverage output
-        id: coverage
-        run: |
-          echo "value=$(jq -r --arg prefix \"Lines: \" '$prefix + (.total | (.lines.pct|tostring) + \"% \nStatements: \" + (.statements.pct|tostring) + \"% \nFunctions: \" + (.functions.pct|tostring) + \"% \nBranches: \" + (.branches.pct|tostring) + \"%\")' coverage/coverage-summary.json)" >> $GITHUB_OUTPUT
+      - name: Get line coverage output
+        id: lineCoverage
+        run: echo "value=$(jq -r '.total.lines.pct|tostring + "%"' coverage/coverage-summary.json)" >> $GITHUB_OUTPUT
+      
+      - name: Get statement coverage output
+        id: stmtCoverage
+        run: echo "value=$(jq -r '.total.statements.pct|tostring + "%"' coverage/coverage-summary.json)" >> $GITHUB_OUTPUT
 
-      - name: Check the output coverage
-        run: echo "JQ Coverage - ${{ steps.coverage.outputs.value }}"
+      - name: Check the Line output coverage
+        run: echo "JQ Line Coverage - ${{ steps.lineCoverage.outputs.value }}"
+      
+      - name: Check the Statement output coverage
+        run: echo "JQ Statement Coverage - ${{ steps.stmtCoverage.outputs.value }}"
