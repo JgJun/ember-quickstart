@@ -42,7 +42,7 @@ jobs:
         run: echo "JQ Statement Coverage - ${{ steps.stmtCoverage.outputs.value }}"
 
       - name: Add comment
-        uses: actions/github-script@v7
+        uses: actions/github-script@v6
         with: 
           script: |
             github.rest.issues.createComment({
